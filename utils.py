@@ -18,7 +18,7 @@ SCRN_SIZE = 352
 
 
 def prepare_image(image_path: str) -> torch.Tensor:
-    """Convert a PIL Image to model-compatible input
+    """ Convert a PIL Image to model-compatible input
     Args:
         image_path (str): path of the input image
     Returns:
