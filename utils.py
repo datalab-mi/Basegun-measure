@@ -18,8 +18,13 @@ from SCRN.utils.data import test_dataset, SCRN_SIZE
 
 
 def apply_SCRN(image_root):
-"""
-"""
+    """ Load SCRN model with parameters and then apply it on the images of the folder 
+    Args:
+        image_root (str): path of the folder containing images
+    Returns:
+        infos (dict): contains pre-processed image, path of the segmented image and the original size
+    """
+    
     device = torch.device('cpu')
     model = SCRN()
     model.load_state_dict(torch.load('./SCRN/model/model.pth', map_location=device))
