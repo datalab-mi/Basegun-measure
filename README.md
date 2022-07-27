@@ -14,4 +14,7 @@ Computer vision method for measuring the overall length of a firearm in a pictur
 - another one
 
 ### **3. Launch the algorithm**
-- python3 main.py --images_root <..> --save_root <...>
+- If you want to use the folders by default (./data/input_images & ./data/segmented_images) : 
+    python3 main.py
+- Otherwise, you must specify these two parameters :
+    python3 main.py --images_root .../yourImagesPath/ --save_root .../yourSavePath/
