@@ -1,5 +1,5 @@
-# Computer Vision - Gun Length Measurement
-Computer vision method for measuring the overall length of a gun in a picture
+# Computer Vision - Firearm Length Measurement
+Computer vision method for measuring the overall length of a firearm in a picture
 
 ## How does it work ? 
 
