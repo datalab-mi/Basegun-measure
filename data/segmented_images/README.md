@@ -1,1 +1,1 @@
-# The segmented images from SCRN will be saved here
+The segmented images from SCRN will be saved here

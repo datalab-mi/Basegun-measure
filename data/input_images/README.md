@@ -1,1 +1,1 @@
-# Put your image(s) in this folder
+Put your image(s) in this folder
