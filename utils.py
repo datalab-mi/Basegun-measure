@@ -5,11 +5,14 @@ import numpy as np
 
 import cv2
 import imageio
+from PIL import Image
 import skimage
 
 import torch
 import torch.nn.functional as F
 from torch.autograd import Variable
+import torch.utils.data as data
+import torchvision.transforms as transforms
 
 from SCRN.model.ResNet_models import SCRN
 
@@ -30,7 +33,7 @@ def prepare_image(image_path: str) -> torch.Tensor:
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])]) # 3 values of mean and std : for each channel of RGB
     
-    with open(path, 'rb') as f:
+    with open(image_path, 'rb') as f:
         im = Image.open(f)
         image = im.convert('RGB')
     
@@ -56,13 +59,14 @@ def load_SCRN():
 
 
 
-def apply_SCRN(model, image: torch.Tensor, image_name: str, original_size: list) -> str:
+def apply_SCRN(model, image: torch.Tensor, image_name: str, original_size: list, save_root: str) -> str:
     """ Apply SCRN on the image AND save the resulted image with its corresponding length
     Args:
         model (Model): loaded model
         image (torch.Tensor): preprocessed image
         image_name (str): name of the image in the folder
         original_size (list): list containing the original size (width and height) of the image
+        save_root (str): path where the segmented images will be stored
     Returns:
         new_path (str): path of the segmentated image made by SCRN
     """   
@@ -73,7 +77,7 @@ def apply_SCRN(model, image: torch.Tensor, image_name: str, original_size: list)
     res = res.sigmoid().data.cpu().numpy().squeeze() # dtype : float32
     res = skimage.img_as_ubyte(res) # dtype : uint8 (this type is needed by imagio.imwrite())
 
-    new_path = save_path + image_name + '.png'
+    new_path = save_root + '/' + os.path.splitext(image_name)[0] + '.png'
     imageio.imwrite(new_path, res)
     
     return new_path
@@ -92,7 +96,7 @@ def measure_length(image_path: str, new_path: str, original_size: list, preproc_
     """    
     orig = cv2.imread(image_path) # original image
     orig = cv2.cvtColor(orig, cv2.COLOR_BGR2RGB)
-
+    
     im_preproc = preproc_image[0].permute(1,2,0).numpy().astype(np.uint8) # preprocessed image from SCRN
     im_preproc = cv2.resize(im_preproc, (original_size[0], original_size[1]))
 
@@ -177,18 +181,20 @@ def BasegunV3(images_root: str, save_root: str) -> dict:
     if not os.path.exists(save_root):
         os.makedirs(save_root)
 
-    model = load_model() # SCRN
-        
+    model = load_SCRN() # SCRN
+    extensions = ['jpg', 'png', 'jpeg']
     lengths = {}
     
     with torch.no_grad():
         for image_name in os.listdir(images_root):
-            image_path = images_root + '/' + image_name
-            
-            preproc_image, original_size = prepare_image(image_path) # preprocessed tensor (resized, normalized) & original size of the image
-            
-            new_path = apply_SCRN(model, preproc_image, image_name, original_size) # path of the segmented image (segmentation made by SCRN)
+            if any([image_name.endswith(ext) for ext in extensions]): # check if the file is an image
+                            
+                image_path = images_root + '/' + image_name
 
-            lengths[image_path] = measure_length(image_path, new_path, original_size, preproc_image)
-            
+                preproc_image, original_size = prepare_image(image_path) # preprocessed tensor (resized, normalized) & original size of the image
+
+                new_path = apply_SCRN(model, preproc_image, image_name, original_size, save_root) # path of the segmented image (segmentation made by SCRN)
+
+                lengths[image_path] = measure_length(image_path, new_path, original_size, preproc_image)
+    print(lengths)
     return lengths

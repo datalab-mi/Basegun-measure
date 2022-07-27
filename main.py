@@ -16,8 +16,8 @@ def main(images_root, save_root) -> None:
         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--images_root', type=str, default='./data/input_images')
-    parser.add_argument('--save_root', type=str, default='./data/segmented_images')
+    parser.add_argument('--images_root', type=str, default='./data/input_images/')
+    parser.add_argument('--save_root', type=str, default='./data/segmented_images/')
     opt = parser.parse_args()
     
     main(opt.images_root, opt.save_root)
