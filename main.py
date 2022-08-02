@@ -16,8 +16,8 @@ def main(images_root, save_root) -> None:
         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--images_root', type=str, default='./data/input_images/', help='Path of the folder containing all images')
-    parser.add_argument('--save_root', type=str, default='./data/segmented_images/', help='Path of the folder that will store the segmented images')
-    opt = parser.parse_args()
+    parser.add_argument('--images_root', type=str, default='./data/input_images/', help='Path to the folder containing all images')
+    parser.add_argument('--save_root', type=str, default='./data/segmented_images/', help='Path to the folder that will store the segmented images')
+    args = parser.parse_args()
     
-    main(opt.images_root, opt.save_root)
+    main(args.images_root, args.save_root)
