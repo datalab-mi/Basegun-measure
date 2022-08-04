@@ -33,11 +33,26 @@ def prepare_image(image_path: str) -> torch.Tensor:
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])]) # 3 values of mean and std : for each channel of RGB
     
+    '''
     with open(image_path, 'rb') as f:
         im = Image.open(f)
         image = im.convert('RGB')
+    '''
     
+    im2 = cv2.imread(image_path)
+    image2 = cv2.cvtColor(im2, cv2.COLOR_BGR2RGB)
+    image = Image.fromarray(image2)
+        
+    '''
+    print(image_path)
     original_size = image.size
+    print(type(image), image.size, image)
+    try:
+        print(type(image2), image2.shape, image2)
+    except: 
+        print('PIL', type(image2), image2.size, image2)
+    '''
+    
     t_image = img_transform(image).unsqueeze(0)
     
     return t_image, original_size
@@ -51,7 +66,7 @@ def load_SCRN():
     """    
     device = torch.device('cpu')
     model = SCRN()
-    model.load_state_dict(torch.load('./SCRN/model/model.pth', map_location=device))
+    model.load_state_dict(torch.load('./SCRN/model.pth', map_location=device))
     model.to(device)
     model.eval()
     
@@ -191,8 +206,7 @@ def BasegunV3(images_root: str, save_root: str) -> dict:
                             
                 image_path = images_root + '/' + image_name
 
-                preproc_image, original_size = prepare_image(image_path) # preprocessed tensor (resized, normalized) & original size of the image
-
+                preproc_image, original_size = prepare_image(image_path) # preprocessed tensor (resized, normalized) & original size of the image       
                 new_path = apply_SCRN(model, preproc_image, image_name, original_size, save_root) # path of the segmented image (segmentation made by SCRN)
 
                 lengths[image_path] = measure_length(image_path, new_path, original_size, preproc_image)
