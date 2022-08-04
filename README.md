@@ -36,8 +36,9 @@ The main idea is to find its length in pixel and then compare it with the pixel 
 
 
 ### **2. Put your image(s) in a specific folder**
-- data/images_root
-- another one
+This folder will contain images of firearms. There should be only 1 firearm for each image.
+- By default, the folder is *./data/input_images*
+- It can be another one : this new path will have to be given in parameters at the launch
 
 ### **3. Launch the algorithm**
 - If you wish to use the default folders to store your images ➡️ *./data/input_images* & *./data/segmented_images* : 
