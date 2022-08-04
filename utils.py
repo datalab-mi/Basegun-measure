@@ -202,7 +202,7 @@ def BasegunV3(images_root: str, save_root: str) -> dict:
     
     with torch.no_grad():
         for image_name in os.listdir(images_root):
-            if any([image_name.endswith(ext) for ext in extensions]): # check if the file is an image
+            if any([image_name.lower().endswith(ext) for ext in extensions]): # check if the file is an image
                             
                 image_path = images_root + '/' + image_name
 
