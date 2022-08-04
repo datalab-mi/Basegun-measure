@@ -29,7 +29,7 @@ The main idea is to find its length in pixel and then compare it with the pixel 
 ### **1. Load the pre-trained model of Stacked Cross Refinement Network (*SCRN*)**
 - Here is the [link] to their GitHub repository 
     ➡️ it contains the paper, the results of their experiments and a link to the [pre-trained] model
-- Download *model.pth* and put it in *./SCRN/model* 
+- Download *model.pth* and put it in *./SCRN/* 
 
 [link]: https://github.com/wuzhe71/SCRN
 [pre-trained]: https://drive.google.com/file/d/1PkGX9R-uTYpWBKX0lZRkE2qvvpz1-IiG/view
